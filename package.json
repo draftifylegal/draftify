@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Draftify Test</title></head>
+<body>
+  <button id="testBtn">Ping AI Draft</button>
+  <pre id="output"></pre>
+  <script>
+    document.getElementById('testBtn').onclick = async () => {
+      const out = document.getElementById('output');
+      out.textContent = '…waiting…';
+      try {
+        const res = await fetch('https://draftify-backend-9.onrender.com/api/generate-draft', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({
+            jurisdiction: 'USA',
+            documentType: 'NDA',
+            parties: 'Alice vs Bob',
+            facts: 'Testing without UI'
+          })
+        });
+        out.textContent = `Status: ${res.status}\\n`;
+        const txt = await res.text();
+        out.textContent += `Response:\\n${txt}`;
+      } catch (err) {
+        out.textContent = 'Fetch error: ' + err;
+      }
+    };
+  </script>
+</body>
+</html>
